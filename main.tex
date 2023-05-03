@@ -1,0 +1,251 @@
+\documentclass[dvipdfmx,autodetect-engine, unicode, 10pt, aspectratio=169]{beamer}
+
+% \documentclass[dvipdfmx,autodetect-engine]{jsarticle}
+% \usepackage{luatexja}% 日本語
+% \usepackage[haranoaji,deluxe]{luatexja-preset}% フォント指定
+\renewcommand{\kanjifamilydefault}{\gtdefault}% 既定をゴシック体に
+
+\usetheme[progressbar=frametitle]{metropolis}
+\usepackage{appendixnumberbeamer}
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+\usepackage{adjustbox}
+\usepackage{fancyvrb} % verbatim replacement that allows latex
+\usepackage{listings} % Setting for Code block
+
+\title{数量分析と確率・統計}
+\subtitle{証券アナリスト}
+% \date{\today}
+\date{}
+\author{Takayuki Suzuki}
+\institute{This is institude of the author}
+
+\begin{document}
+
+\maketitle
+
+
+\begin{frame}{回帰分析目標}
+    回帰分析目標は、Excelで出力される値のすべてが説明できること \\
+    および単回帰分析が手で計算できること。(下記は出力例) \\
+    \begin{center}
+        \adjustimage{max size={0.5\linewidth}{0.9\paperheight}}{regression_example.PNG} \\
+    \end{center}
+    以下のスライドで、それぞれの項目に関連する説明を行う。
+\end{frame}
+\begin{frame}{単回帰分析}
+    単回帰分析については、分散、平均、共分散などの基本統計量から、\\ 
+    単回帰係数が計算できればよいだろう。　\\
+    推定方法として最小二乗法(OLS)を用いた単回帰の場合、回帰係数は共分散を説明変数の分散で割ったものである。　\\ 
+    {\small
+    ところで、相関係数は  共分散を二つの変数の標準偏差で割ったものであるから、\\
+    回帰係数は相関係数を説明変数の標準偏差で割り、目的変数の標準偏差をかけたものに等しい \\
+    }
+    \begin{align*}
+        \text{単回帰係数 } &\hat{\beta_1} = \frac{S_{x,y}}{S_x^2} \\
+        &\hat{\beta_0} = \bar{y} - \hat{\beta} \bar{x} \\
+        \text{相関係数 } &\rho = \frac{S_{x,y}}{S_x S_y}  \\
+        \text{\footnotesize したがって} \\
+        &\hat{\beta_1} = \rho \cdot \frac{S_y}{S_x}
+    \end{align*}
+
+\end{frame}
+
+\begin{frame}[fragile]{分散分析}
+    分散分析(\underline{An}alysis \underline{O}f \underline{Va}riance, ANOVA) \\
+    は、データの分散を、回帰式によって説明できる部分と、説明できない部分（しばしばノイズとして扱われる）に分けて
+    その割合を分析する方法のこと。 \\
+    SST (sum of squared total) 元データの分散のこと \\
+    SSR (sum of squared regression) ほぼ、予測値の分散のこと \\
+    SSE (sum of squared errors) は、残差の二乗和。　\\
+
+    \begin{center}
+       \colorbox{pink}{
+             \begin{minipage}[t]{0.9\textwidth}
+             {\small 
+                Point : \\
+                全平方和は、回帰平方和と残差平方和の合計である。\\
+                それぞれの分散の大小関係を比較することで、モデルの当てはまりの良さを評価できる。
+                }
+             \end{minipage}
+          }
+    \end{center}
+    とくに、SSEとSSRの大小関係は、後で出てくる回帰係数の仮説検定で重要になる。 \\
+    もし$SSE>>SSR$なら、ノイズの方が大きくてモデルの当てはまりが悪いといえる。\\
+    逆に$SSE<<SSR$であれば、ノイズは小さく、モデルの当てはまりが良いと言えそうだ。
+
+\end{frame}
+
+\begin{frame}{回帰の標準誤差}
+    SSEを自由度(n - k -1)で割ったものの平方根を、残差分散という。 \\
+    \begin{align*}
+        \text{残差分散} &= \text{SSE} / (n-k-1) \\
+        &= \sum(\hat{y} - y)^2 / (n-k-1)  \\
+        &\text{(ただし$\hat{y}$はyの予測値)}
+    \end{align*}
+    普通の不偏分散に似ているが、k (説明変数の数。単回帰ならk=1)を引いている点が異なる.\\
+    回帰の標準誤差は、残差分散の平方根である。
+    \begin{align*}
+        \text{回帰の標準誤差} &= \sqrt{\text{残差分散}}
+    \end{align*}
+    これは回帰の誤差項の分散の推定値である。 \\
+    回帰の標準誤差（または誤差項の分散の推定値）は、後で回帰係数の検定を行う時に利用する。
+\end{frame}
+
+ \begin{frame}{決定係数}
+    決定係数は、よくでてくる。相関係数の二乗でもある。 \\
+    \begin{align*}
+        \text{決定係数 } R^2= \frac{SSR}{SST}
+    \end{align*}
+    相関係数は、決定係数のルートに等しい。\\
+    つまり、回帰式で説明可能な変動と、総変動の比である。\\
+    回帰式で説明可能な変動の割合が大きい＝相関が大きい。\\
+    Excelでは「重相関」というが、まあ、相関係数のことだろう。 \\
+    自由度調整済み決定係数というのもある。 決定係数を説明変数の数で割り引いたもの。
+    \begin{align*}
+        \text{自由度調整済み決定係数 }\bar{R^2} = 1 - \frac{n-1}{n-k-1}\left(1-R^2\right)
+    \end{align*}
+\end{frame}
+
+\begin{frame}{回帰係数の検定}
+    良くある問題として、回帰係数が０と有意に異なるか否か、を検定しろというものがある。 \\
+    下記の式を用いてt値を計算し、それを閾値と比べて判定する。
+    \begin{align*}
+        t = \frac{\text{推定値 - 仮説値}}{{\text{推定値の標準誤差}}}
+    \end{align*}
+    回帰係数が０と有意に異なるかをt検定する場合は下記の計算になる。
+    \begin{align*}
+        \text{t値} = \frac{\text{回帰係数} - 0}{\text{回帰係数の標準誤差}}
+    \end{align*}
+    係数の標準誤差は、ふつう問題で与えられているはず。(またはｔ値から逆算する) \\
+    回帰係数の標準誤差は、残差分散を説明変数の偏差二乗和で割って、平方根を取ったものである。
+    
+\end{frame}
+
+\begin{frame}{回帰係数の標準誤差の算出}
+    上記の通り、回帰係数の標準誤差は、ふつう問題文で与えられているはず。\\
+    念のため計算方法を記載する。\\
+    \begin{align*}
+        \text{回帰係数の標準誤差} &= \sqrt{\frac{\text{残差分散}}{{\text{ｘの偏差二乗和}}}} \\
+    \end{align*}
+\end{frame}
+
+\begin{frame}{F検定}
+    F検定は、二つの分布の分散が等しいか否かを検定する方法である。 \\
+    
+    \begin{center}
+    {\footnotesize
+        \colorbox{pink}{
+            \begin{minipage}[t]{0.9\textwidth}
+                point: \\
+                自由度$d_1$,$d_2$の二つのデータの不偏分散の比$s_1 / s_2$は、自由度$(d_1, d_2)$のF分布$F(d_1, d_2)$に従う。
+                ふつう、二つの分散が等しいという帰無仮説に対する検定を行うために使われる。
+                検定の閾値は、F分布表で自由度$(d_1, d_2)$ に対応する箇所を探して使う。 \scriptsize{問題で与えられている場合もある。}
+            \end{minipage}
+        }
+    }
+    \end{center}
+    % 標準分布に従う二つの分布$X_1 \sim N(\mu_1, \sigma_1)$, $X_2 \sim N(\mu_2, \sigma_2)$が有るとき、二つの変数の分散の比は、F分布に従う。
+    {\footnotesize
+        Note:
+        \begin{itemize}
+            \item 正確には二つの分布が正規分布である仮定が必要だが、 \\
+            後の「回帰分析の仮定が成り立たない場合」の項でも出てこないので忘れてよい
+            \item たまに、解説にカイ2乗分布がどうのこうのと書いている場合があるが、これも忘れてよい。
+        \end{itemize}
+        }
+    二つの期間のボラティリティが等しいか検定する問題(2016年午前第8問問5)では、ボラティリティは標準偏差であるので、
+    F検定を適用するにはまず不偏分散を求める。不変分散はボラティリティを二乗して自由度で割ればよい。自由度はデータ数-1である。
+    
+\end{frame}
+
+\begin{frame}{2016年午前第８問問題５}
+    問題文により、状態１の時のデータ数２３２、ボラティリティ１６．１％、\\
+    状態２の時のデータ数が１２，ボラティリティ３１．７％である。\\
+    これを当てはめる。分散はボラティリティの二乗なので（ボラは標準偏差なので）、
+    \begin{align*}
+        F = \frac{0.161^2}{0.317^2}
+    \end{align*}
+    これを自由度$(231, 11)$のF分布の棄却域の下側閾値、および上側閾値と比較して回答すればよい。
+
+\end{frame}
+
+\begin{frame}{回帰係数の仮設検定とF検定}
+    回帰分析では、しばしば、回帰式を作成してもその回帰式の検定を行うことがある。\\
+    単回帰の場合や、重回帰でも個別の係数の検定を行う場合は、回帰係数をその標準誤差SEで割ってｔ値を得て、それをｔ値の閾値と比較する、ｔ検定を行えばよい。 （上記で説明済み）\\　\\
+    一方、たまに、重回帰のすべての係数がゼロであるか否か（つまり、重回帰式は全く無意味か否か）という検定をする場合がある。
+    この場合は、個別の係数に対する検定とは全くことなり、前記の分散分析と、F検定を用いた検定を行う。
+\end{frame}
+
+\begin{frame}{回帰係数の仮設検定とF検定}
+    戦略: \\
+    予測値の分散と、残差の分散に差があるかないか、調べる。\\
+    予測値の分散はそのま母分散 (=SSR=($\hat{y} - \bar{y})^2$)\\
+    残差分散は前記で示したもの（=$\text{SSE} / ( n -k - 1)$) \\
+    \\
+    この二つはどちらも分散なので、F検定を用いて、等しいか否かを検定することができる。\\
+    自由度は、予測値は説明変数の数k, 残差はn-k-1である。\\
+    \begin{align*}
+        \text{F} = \frac{SSR/k}{SSE/(n-k-1)}
+    \end{align*}
+    この値を自由度$(k, n-k-1)$のF分布の値と比較して、検定を行う。
+\end{frame}
+% \begin{frame}{Show Image}
+%     \begin{center}
+%     \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{frog.jpg}
+%     \end{center}
+% \end{frame}
+
+% \begin{frame}[fragile]{Example to show a table}
+% \begin{Verbatim}[commandchars=\\\{\}]
+%              roughness          created\_at   filtered          p
+% measure\_num
+% 0            19.633169 2022-10-27 10:10:00  19.633169  50.000000
+% 1            12.082638 2022-10-27 10:20:00  14.209548  14.366197
+% 2            21.008903 2022-10-27 10:30:00  17.163788   8.689765
+% 3            24.516811 2022-10-27 10:40:00  19.563573   6.527344
+% 4            18.202181 2022-10-27 10:50:00  19.191301   5.468994
+% 5            59.366593 2022-10-27 18:10:00  29.010100   4.887979
+% 6            54.695048 2022-10-27 18:20:00  34.851901   4.548813
+% 7            52.050755 2022-10-27 18:30:00  38.587230   4.343695
+% 8            73.510816 2022-10-27 18:40:00  45.950837   4.216982
+% 9            61.782426 2022-10-27 18:50:00  49.226134   4.137674
+% \end{Verbatim}
+% \end{frame}
+
+% \begin{frame}[fragile]{Example of the minipage}
+% \begin{minipage}[b]{0.3\linewidth}
+% hogehoge
+% \end{minipage}
+% \begin{minipage}[b]{0.3\linewidth}
+% fugafuga
+% \end{minipage}
+% \end{frame}
+
+% \begin{frame}[fragile]{Example of Code block}
+% \begin{columns}[T]
+% % code
+% \begin{column}{0.64\textwidth}
+% \begin{verbatim}
+%     #include<stdio.h>
+%     int main(){
+%         printf("Hello world!");
+%     }
+% \end{verbatim}
+% \end{column}
+% % description
+% \begin{column}{0.34\textwidth}
+% \begin{itemize}
+% \item including standard IO library.
+% \item define main function
+% \item print string to standard output.
+% \end{itemize}
+% \end{column}
+% \end{columns}
+% \end{frame}
+
+\end{document}
