@@ -1,0 +1,287 @@
+\documentclass[dvipdfmx,autodetect-engine, unicode, 10pt, aspectratio=169]{beamer}
+
+% \documentclass[dvipdfmx,autodetect-engine]{jsarticle}
+% \usepackage{luatexja}% 日本語
+% \usepackage[haranoaji,deluxe]{luatexja-preset}% フォント指定
+\renewcommand{\kanjifamilydefault}{\gtdefault}% 既定をゴシック体に
+
+\usetheme[progressbar=frametitle]{metropolis}
+\usepackage{appendixnumberbeamer}
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+\usepackage{adjustbox}
+\usepackage{fancyvrb} % verbatim replacement that allows latex
+\usepackage{listings} % Setting for Code block
+\usepackage{bm} % for Bold font in Math \bm
+
+\title{ポートフォリオ分析と線形代数}
+\subtitle{証券アナリスト}
+% \date{\today}
+\date{}
+\author{Takayuki Suzuki}
+\institute{This is institude of the author}
+
+\begin{document}
+
+\maketitle
+
+
+\begin{frame}{線形代数目標}
+    線形代数（ベクトルと行列）では、「理解する」と「計算できる」が有る。 
+    \begin{itemize}
+        \item 計算できるようにするもの
+        \begin{itemize}
+            \item ２ｘ２の固有方程式から固有ベクトルが計算できる
+            \item ２ｘ２の対角化
+            \item 関数を成分とするベクトルの微分表記と関数の計算ができる
+        \end{itemize}
+        \item 理解すればいいもの
+        \begin{itemize}
+            \item 基本的計算
+            \item 内積の応用
+            \item 数理モデルの行列での表記
+            \item 行列式や逆行列について
+            \item 期待値、分散、共分散のベクトルの二次形式
+        \end{itemize}
+    \end{itemize}
+    計算できる必要があるのは、２ｘ２の固有方程式から固有ベクトルを計算すること \\
+    および対角化、そして、関数を成分とするベクトルの微分表記、計算ができること。 \\
+    
+\end{frame}
+
+\begin{frame}{理解しておく用語のリスト}
+    % \begin{minipage}[b]{0.3\linewidth}
+    % hogehoge
+    % \end{minipage}
+    % \begin{minipage}[b]{0.3\linewidth}
+    % fugafuga
+    % \end{minipage}
+    \begin{minipage}[t]{0.45\linewidth}
+    \begin{itemize}
+        \item 内積
+        \item 直交
+        \item 転置（転置行列）
+        \item 正方行列
+        \item 対角成分、非対角成分
+        \item トレース
+        \item 単位行列
+        \item 対称行列
+        \item ゼロベクトル、ゼロ行列
+    \end{itemize}
+    \end{minipage}
+    \begin{minipage}[t]{0.45\linewidth}
+    \begin{itemize}
+        \item 行列式
+        \item 逆行列
+        \item 正則行列
+        \item 固有値, 固有ベクトル
+        \item 直交行列
+        \item 対角化とスペクトル分解
+        \item 一次形式と二次形式
+        \item 一次形式と二次形式それぞれの微分
+    \end{itemize}
+    \end{minipage}
+\end{frame}
+
+\begin{frame}{計算できるようにしておくもの}
+    計算をできるようにしておくこと
+    \begin{itemize}
+        \item ２ｘ２行列の固有ベクトルの算出
+        \item ２ｘ２行列の対角化
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{２ｘ２行列の固有ベクトルの算出}
+    行列$\bm{A}$に対して、スカラー$\lambda$とベクトル$\bm{x}$が
+    \begin{align*}
+        \bm{A}\bm{x} = \lambda \bm{x}
+    \end{align*}
+    という関係を満たすとき、\\
+    $\lambda$を行列$\bm{A}$の固有値(Eigenvalue), $\bm{x}$を行列$\bm{A}$の固有ベクトル(Eigenvector)という。\\
+    行列Aの固有値を求めろ、という計算問題は出題される可能性がある。\\
+    \vspace{5pt}
+
+    固有値と固有ベクトルは、
+    \begin{align*}
+        \text{det}(\bm{A} - \lambda \bm{I})
+    \end{align*}
+    がゼロである条件から求める。$\text{det}$は行列式、$\bm{I}$は単位行列である。 \\
+    この式を特性方程式（または固有方程式）とよぶ。
+\end{frame}
+
+
+\begin{frame}{固有値と固有ベクトルの求め方例}
+    例；\\
+    $\bm{A} =
+        \begin{bmatrix}
+            1 && 2 \\
+            3 && 2
+        \end{bmatrix}
+    $の固有値を求める。\\
+    $
+    \bm{A} - \lambda \bm{I} = 
+    \begin{bmatrix}
+        1-\lambda && 2 \\
+        3 && 2 - \lambda 
+    \end{bmatrix}
+    $
+    であるので、その行列式は、
+    \begin{align*}
+        \text{det}(\bm{A} - \lambda \bm{x}) = (1-\lambda)(2-\lambda) - 2\cdot 3
+    \end{align*}
+    である。これがゼロである条件を計算する。  
+    \begin{align*}
+        (1-\lambda)(2-\lambda) - 2\cdot3 = \lambda^2 - 3\lambda - 4 = 0
+    \end{align*}
+    より、$\lambda = -1, 4$が固有値である。\\
+    \vspace{5pt}
+\scriptsize $\begin{bmatrix}
+        a && b \\
+        c && d
+    \end{bmatrix}$の行列式が、$(ad-bc)$であったことを覚えておく
+\end{frame}
+
+\begin{frame}{固有値と固有ベクトルの求め方例}
+    つぎに、それぞれの固有値に対して、固有ベクトルを求める。
+    固有値が$\lambda = -1$のとき、固有値の定義から、
+    \begin{align*}
+        (\bm{A} - (-1)\cdot \bm{I} )\bm{x} = 0
+    \end{align*}
+    であるから、
+    \begin{align*}
+        &(\bm{A} - \bm{I})\bm{x} = 
+            \begin{bmatrix}
+                1-(-1) && 2 \\
+                3 && 2 - (-1)
+            \end{bmatrix}
+            \begin{bmatrix}
+                x_1 \\ x_2
+            \end{bmatrix} = 
+            \begin{bmatrix}
+                2 && 2 \\
+                3 && 3
+            \end{bmatrix}
+            \begin{bmatrix}
+                x_1 \\ x_2
+            \end{bmatrix} = 0 \\
+            &\Rightarrow 2x_1 + 2x_2 +0 \text{ and } 3x_1 + 3x_2 = 0
+    \end{align*}
+    これを満たすベクトルは無数にあるが、長さが１である単位ベクトルを選ぶと、\\
+    $x = \frac{1}{\sqrt{2}}\begin{bmatrix}
+        1 \\ -1
+    \end{bmatrix}$
+    が対応する固有ベクトルである。\\もう一方の固有値$\lambda =4$に対する固有値も、同様に求める。
+    
+\end{frame}
+
+\begin{frame}{対角化}
+    固有ベクトルを並べた行列Pで元の行列を挟むと、結果、対角成分だけになる性質がある。
+    ２ｘ２行列で示す。\\
+    $\bm{A}$の固有値を$\lambda_1, \lambda_2$, 固有ベクトルを
+    $\bm{x}_1=\begin{bmatrix}
+        x_{1,1} \\ x_{1,2}
+    \end{bmatrix}, \bm{x}_2=\begin{bmatrix}
+        x_{2,1} \\ x_{2,2}
+    \end{bmatrix}$
+    とする。固有ベクトルを並べた行列Pを考える。
+    \begin{align*}
+        \bm{P} = \begin{bmatrix}
+            \bm{x}_1&&\bm{x}_2
+        \end{bmatrix} = \begin{bmatrix}
+            x_{1,1} && x_{2,1} \\
+            x_{1,2} && x_{2,2}
+        \end{bmatrix}
+    \end{align*}
+    元の行列$\bm{A}$にこの行列$\bm{P}$とその逆行列$\bm{P}^{-1}$を左右から掛けると
+    \begin{align*}
+        \bm{P}^{-1}\bm{A}\bm{P} = \begin{bmatrix}
+            \lambda_1 && 0 \\
+            0 && \lambda_2
+        \end{bmatrix}
+    \end{align*}
+    となる。（計算すると、必ずそうなる）\\
+    この操作を、行列の対角化という。\\
+    さらに、対角化の式を逆転させると、元の行列Aが、固有ベクトルの直積の和で表現できる。
+    これを、行列のスペクトル分解という。\footnotesize (スペクトル分解の話は、たぶん無理なのでやめておく）
+\end{frame}
+
+\begin{frame}{ポートフォリオマネージメントへの応用}
+    \begin{center}
+        \Large ポートフォリオマネージメントへの応用    
+    \end{center}
+\end{frame}
+\begin{frame}[fragile]{分散共分散行列}
+    通常の分散は、確率変数に対して計算される。つまり、\\
+    $\text{var}(x)$と書いた場合、xは確率変数であった。つまり単純な定数ではなく、値が一定の確率分布によってランダムに定まる変数であった。 
+    \footnote{xが定数であれば、$\text{E}(x)=x, \text{var}(x)=0$であるが、xが確率変数であれば、$\text{E}(x)=\bar{x}, \text{var}(x)=\sigma^2_x$である。}
+    \\
+    では、ベクトル変数$\bm{x}$に対する分散はどうなるか？ 分散共分散行列になる。\\
+    例えば、３つの資産のリターン（これは確率変数である）から成る下記のベクトルを考える。
+    \[\bm{r} = (r_1, r_2, r_3)\]
+    これの分散は、実は下記のような行列になり、これを分散共分散行列という。（覚える）
+    \begin{align*}
+        \text{var}(\bm{r}) = 
+        \begin{bmatrix}
+        \text{var}(r_1) & \text{cov}(r_1, r_2) & \text{cov}(r_1, r_3)\\
+        \text{cov}(r_2, r_1) & \text{var}(r_2) & \text{cov}(r_2, r_3)\\
+        \text{cov}(r_3, r_1) & \text{cov}(r_3, r_2) & \text{var}(r_3)
+        \end{bmatrix}
+    \end{align*}
+    
+\end{frame}
+
+\begin{frame}{一次形式とその微分}
+    一次形式とは、ベクトルの世界の一次式で、係数ベクトル$\bm{a}$と、変数ベクトル$\bm{x}$の積で表される式のこと。
+    \begin{align*}
+        f(\bm{x}) = \bm{a}^T\bm{x}
+    \end{align*}
+    これのｘでの微分すると下記になる。
+    \begin{align*}
+        \frac{\partial f(\bm{x})}{\partial \bm{x}} = \bm{a}
+    \end{align*}
+    つまり、結果的には普通の一次式の微分と同じになる。
+\end{frame}
+
+\begin{frame}{二次形式とその微分}
+    二次形式とは、ベクトルの世界の二次式である。\\
+    この場合、係数はもはやベクトルではなく、行列になる。\\
+    すなわち、係数行列を$\bm{A}$とすると、二次形式は、
+    \begin{align*}
+        f(\bm{x}) = \bm{x}^{T}\bm{A}\bm{x}
+    \end{align*}
+    これを微分すると、下記になる。
+    \begin{align*}
+        \frac{\partial f(\bm{x})}{\partial \bm{x}} = 2\bm{A} \bm{x}
+    \end{align*}
+    つまり、結果的には、普通の二次式の微分とほぼ、同じになる。\\
+    これらの微分のやり方は、結果だけ知っておけばいいはず。\\
+    分散共分散行列と、一次形式、二次形式の微分は、次の効用関数最適化への応用で利用される。
+\end{frame}
+
+\begin{frame}{効用関数最適化への応用}
+    $x$を各資産の配分比率としたとき、効用関数Uが
+    \begin{align*}
+        &\text{U} = \bm{x}^T \bm{\mu} - \frac{1}{2\tau}\bm{x}^T\Sigma\bm{x} \\\
+        &\text{\scriptsize ただし$\mu$は各資産の期待リターンベクトル、$\Sigma$は各資産の分散共分散行列}
+    \end{align*}
+    で表せた場合の、最適比率を求める。最適の時、微分がゼロになることから、
+    \begin{align*}
+        \frac{\partial \text{U}}{\partial \bm{x}} = 0
+    \end{align*}
+    の条件から求めることができればよい。
+    \begin{align*}
+        \frac{\partial \text{U}}{\partial \bm{x}} = \bm{\mu} - \frac{1}{\tau} \Sigma \bm{x}
+    \end{align*}
+    であるから、これがゼロになる条件を見つければよい。
+    \begin{align*}
+        &\bm{\mu} - (1/\tau) \Sigma \bm{x} = 0 \\
+        &\Rightarrow \bm{x} =  \tau\Sigma^{-1}\bm{\mu}
+    \end{align*}
+    となり、$\tau$、$\Sigma$, $\bm{\mu}$が分かっていれば、上記を計算することで最適分配比率を求めることができる。やることは、行列とベクトルの掛け算である。
+\end{frame}
+
+\end{document}
