@@ -1,0 +1,53 @@
+\documentclass[dvipdfmx,autodetect-engine, unicode, 10pt, aspectratio=169]{beamer}
+
+% \documentclass[dvipdfmx,autodetect-engine]{jsarticle}
+% \usepackage{luatexja}% 日本語
+% \usepackage[haranoaji,deluxe]{luatexja-preset}% フォント指定
+\renewcommand{\kanjifamilydefault}{\gtdefault}% 既定をゴシック体に
+
+\usetheme[progressbar=frametitle]{metropolis}
+\usepackage{appendixnumberbeamer}
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+\usepackage{adjustbox}
+\usepackage{fancyvrb} % verbatim replacement that allows latex
+\usepackage{listings} % Setting for Code block
+\usepackage{bm} % for Bold font in Math \bm
+
+\title{多変量解析}
+\subtitle{証券アナリスト}
+% \date{\today}
+\date{}
+\author{Takayuki Suzuki}
+\institute{This is institude of the author}
+
+\begin{document}
+
+\maketitle
+
+
+\begin{frame}{多変量解析目標}
+    線形代数（ベクトルと行列）では、「理解する」と「計算できる」が有る。 
+    \begin{itemize}
+        \item 主成分分析の行列計算との対応
+        \item 主成分分析の主成分ベクトルの意味が説明できる
+        \item 主成分得点が計算できる
+        \item 因子分析と主成分分析の違いが説明できる
+        \item バリマックス回転？プロマックス回転？
+        \item 判別分析、クラスター分析、マハラノビス距離などの用語を知っている
+    \end{itemize}
+    計算できる必要があるのは、２ｘ２の固有方程式から固有ベクトルを計算すること \\
+    および対角化、そして、関数を成分とするベクトルの微分表記、計算ができること。 \\
+\end{frame}
+
+\begin{frame}{出る問題}
+    結局、例の、水準（パラレルシフト）、傾き、曲率の問題に落ちる。\\
+    この問題について、主成分分析にフォーカスして解説する。
+    例えば、水準はたいていの場合第一主成分だが、なぜ第一主成分なのか？など。
+\end{frame}
+
+\end{document}
