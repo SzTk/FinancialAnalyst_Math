@@ -14,6 +14,8 @@
 \usepackage{xspace}
 \newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
 \usepackage{adjustbox}
+\usepackage{caption}
+\captionsetup[figure]{font=tiny}
 \usepackage{fancyvrb} % verbatim replacement that allows latex
 \usepackage{listings} % Setting for Code block
 \usepackage{bm} % for Bold font in Math \bm
@@ -66,10 +68,12 @@
         しかも、最も変動が大きい方向が第一主軸となっている。
     \end{minipage}
     \begin{minipage}{0.45\linewidth}
-    \begin{center}
-        \adjustimage{max size={1\linewidth}{0.4\paperheight}}{PCA.png}
-        \caption{\tiny =https://www.intage.co.jp/glossary/401/}
-    \end{center}
+        \begin{figure}[h]
+        \centering
+            \includegraphics[width=0.9\textwidth]{PCA.png}
+        \caption*{\tiny https://www.intage.co.jp/glossary/401/}
+        \label{fig:mesh1}
+        \end{figure}
     \end{minipage}
 \end{frame}
 
@@ -88,11 +92,11 @@
         2/\sqrt{3} \\ -1/\sqrt{3}
     \end{bmatrix}$
     および
-    $\bm{w}_2\begin{bmatrix}
+    $\bm{w}_2 = \begin{bmatrix}
         1/\sqrt{3} \\ 2/\sqrt{3}
     \end{bmatrix}$
     であることが分かる（計算せよ）\\
-    絶対値が大きい固有値8に対応するベクトルが、第一主軸で、固有値3に対応するベクトルが、第二主軸である。
+    絶対値が大きい固有値8に対応するベクトル$\bm{w}_2$が、第一主軸で、固有値3に対応するベクトル$\bm{w}_1$が、第二主軸である。
 \end{frame}
 
 \begin{frame}{主成分得点}
