@@ -269,9 +269,26 @@
          y_t = \alpha + \beta_1 y_{t-1} + \beta_2 y_{t-12} + \epsilon_t \\
     \end{align*}
     こうすることで、年単位の周期性の因子をモデルに導入することができる。
+\end{frame}
+\begin{frame}{分析手順のフロー}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.65\linewidth]{correlogram.drawio.png}
+        \caption{分析手順のフロー}
+    \end{figure}
     
 \end{frame}
 \begin{frame}{見せかけの回帰と共和分}
-    共和分とは
+    単位根過程の重要な性質として、見せかけの回帰がある。\\
+    これは、まったく関係のない二つの単位根過程で回帰分析を行うと、まったく無関係にもかかわらず、回帰係数が統計的に有意にゼロでない回帰式が導かれてしまう、というもの。\\
+    原理はともかく、
+    \begin{itemize}
+        \item 二つの単位根過程同士の回帰分析をすると、見せかけの回帰が起こるために普通は正しく分析ができない。
+    \end{itemize}
+    ということを覚えておくこと。これには例外があり、二つの単位根過程が「共和分関係」にある場合は見せかけの回帰が発生しない。
+    共和分関係についてのこれ以上の内容はおそらく出題されないので割愛する。\\
+    \vspace{10pt}
+    ⇒ 協会テキスト 第４章の練習問題を解け。
 \end{frame}
+
 \end{document}
